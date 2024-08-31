@@ -1,0 +1,72 @@
+\section{Evaluations}
+
+\subsection{Emulation Results}
+At first glance, the transfer rates for all CPU to GMEM methods are slow (less than 1 GB/s). The emulation times are taken directly from the \texttt{summary.csv} and \texttt{native\_trace.csv} provided by Xilinx after the execution of host. As mentioned in the emulation logs, "Hardware emulation runs simulation underneath. Using a large data set will result in long simulation times. It is recommended that a small dataset is used for faster execution." \\
+
+Hardware emulation is significantly slower than actual hardware execution because it simulates the entire hardware system in software, including the intricate details of CPU operations, memory accesses, and data transfers. This software-based simulation must process each operation step-by-step, resulting in a substantial overhead compared to the near-instantaneous execution that occurs on physical hardware. Due to these limitations and resource constraints, emulation tests were run only once and took about a day to compile and execute with large data sets. \\
+
+While there cannot be a accurate comparison due to the degraded performance of hardware emulation, it is still possible to compare relative trends. \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+         Peak READ Speed & 0.259 GB/s @ 512 KB \\
+         Peak Consecutive READ Speed & 0.256 GB/s @ 512 KB \\
+         Peak WRITE Speed & 0.147 GB/s @ 8 MB \\
+         Peak Consecutive WRITE Speed & 0.134 GB/s @ 8 MB \\
+    \end{tabular}
+    \caption{Notable Emulation Data Transfer Speeds (GB/s) for OCL CPU to GMEM}
+    \label{tab:my_label}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+         Peak READ Speed & 0.301 GB/s @ 512 KB \\
+         Peak Consecutive READ Speed & 0.303 GB/s @ 512 KB \\
+         Peak WRITE Speed & 0.147 GB/s @ 256 KB \\
+         Peak Consecutive WRITE Speed & 0.147 GB/s @ 512 KB \\
+    \end{tabular}
+    \caption{Notable Emulation Data Transfer Speeds (GB/s) for XRT CPU to GMEM}
+    \label{tab:my_label}
+\end{table}
+
+From Table 1 and Table 2, it is clear that in general, the peak WRITE speeds are slower compared to the peak READ speeds. The READ speeds using the XRT API appear to be a bit faster, but there is no obvious difference between the WRITE speeds of the 2 APIs. \\
+
+There does not seem to be a obvious drop in data transfer speeds regarding singular data transfers and consecutive data transfers, except for the WRITE speeds when doing consecutive READ/WRITEs. This is likely due to the additional overhead in using OCL for data transfers. Another trend to notice is that in emulation, after reaching the peak speeds, the transfer data rates seem to drop when a higher data size is being transferred. There does not appear to be a trend regarding when the peak transfer rate is reached for each method. \\
+
+For small data transfers, latency is the most important factor for considering performance. As seen in all the graphs, the latency is low for all small sized data transfers. However, due to the fixed overhead for setting up the transfer, it is still significant. In this case, for small data transfers, around a few bytes, the XRT API shows significant advantage, taking only 3/4 of the time that OCL takes. In this emulation scenario, it is clear that XRT has less data transfer overhead than OCL. 
+
+\subsection{Hardware Results}
+
+While emulation provides insights into system behavior (such as for functional verification), it does not accurately reflect real-world performance. Therefore, the following analysis will focus more on actual hardware results, which offer a more realistic representation of system capabilities. \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+         Peak READ Speed & 11.901 GB/s @ 2.0 GB \\
+         Peak Consecutive READ Speed & 11.901 GB/s @ 2.0 GB \\
+         Peak WRITE Speed & 8.795 GB/s @ 0.5 GB \\
+         Peak Consecutive WRITE Speed & 8.752 GB/s @ 0.5 GB \\
+    \end{tabular}
+    \caption{Notable Hardware Data Transfer Speeds (GB/s) for OCL CPU to GMEM}
+    \label{tab:my_label}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+         Peak READ Speed & 11.906 GB/s @ 2.0 GB \\
+         Peak Consecutive READ Speed & 11.908 GB/s @ 2.0 GB \\
+         Peak WRITE Speed &  8.775 GB/s @ 1.0 GB \\
+         Peak Consecutive WRITE Speed & 8.769 GB/s @ 0.125 GB \\
+    \end{tabular}
+    \caption{Notable Hardware Data Transfer Speeds (GB/s) for XRT CPU to GMEM}
+    \label{tab:my_label}
+\end{table}
+
+Similarly to the emulation results, according to Table 3 and 4, the peak WRITE speeds are a bit slower than the peak READ speeds. Contrast to emulation results, both APIs display similar peak speed results. This leads to the conclusion that the overhead in OCL is relatively low for large sized data transfers, and does not affect the data transfer speeds in a noticeable way. \\
+
+The data transfer speeds between singular data transfers and consecutive data transfers are also similar for both APIs, leading to the conclusion that sending consecutive data transfers has no noticeable affect on READ/WRITE speeds. Next, hardware results did not see it's data transfer speeds taper off after reaching it's peak data transfer rate but instead seemed to keep a constant data transfer rate after as the data sizes grew. There does not appear to be a trend regarding when the peak transfer rate is reached for each method. \\
+
+Now, analyzing the data transfer speeds for small data sizes. It is shown that XRT shows significant speed advantages, using only 1/3 to 1/2 of the time that OCL takes to transfer. This clearly shows that OCL has more setup overhead compared to XRT, but has less of a impact when data sizes are large enough that the extra time taken is insignificant.

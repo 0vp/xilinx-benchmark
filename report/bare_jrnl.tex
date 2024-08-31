@@ -1,0 +1,44 @@
+\documentclass[11pt,onecolumn]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage[settings]{markdown}
+\usepackage{hyperref}
+\usepackage{breakurl}
+\usepackage{titlesec}
+\usepackage{authblk}
+\usepackage{abstract}
+
+\graphicspath{ {./content/} }
+
+% Attempt to mimic IEEEtran styling
+\usepackage{times}
+\usepackage{mathptmx}
+\usepackage{microtype}
+
+% Adjust section formatting to be more like IEEEtran
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection.}{1em}{}
+
+\title{A Comparative Study of OpenCL and XRT Performance for Data Transfers on Xilinx FPGA}
+
+\author[]{Qasim Li}
+\affil[]{McGill University}
+\affil[]{Supervised by Christophe Dubach}
+
+\date{Created August 20, 2024; revised August 30, 2024}
+
+\begin{document}
+
+\maketitle
+
+\input{Introduction}
+\input{Background}
+\input{Overview}
+\input{Setup}
+\input{Benchmarks}
+\input{Evaluations}
+\input{Conclusions}
+
+\end{document}

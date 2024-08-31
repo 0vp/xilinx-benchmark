@@ -1,0 +1,6 @@
+\section{Background}
+In a typical Vitis platform, a host system (typically a CPU) interacts with an FPGA board to accelerate specific tasks. The FPGA has access to global memory (gmem, the ram on the fpga board), which serves as a shared space for data exchange between the host and FPGA. \\
+
+Developers can use either the OpenCL API or the Xilinx Runtime (XRT) API to manage this interaction. These APIs allow the host to control the FPGA, load kernels (specialized functions implemented on the FPGA), transfer data to and from the global memory, and synchronize operations. \\
+
+OpenCL provides a more generalized, high-level interface, while XRT offers FPGA-specific, lower-level control. This setup enables efficient offloading of computationally intensive tasks from the host to the FPGA, leveraging hardware acceleration while maintaining a flexible software development environment.
